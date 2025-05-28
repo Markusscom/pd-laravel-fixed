@@ -18,6 +18,7 @@ class BookController extends Controller
 
     public function store(Request $request) {
         $book = Book::create([
+            'title' => $request['title'],
             'author' => $request['author'],
             'released_at' => $request['released_at'],
         ]);
@@ -35,8 +36,20 @@ class BookController extends Controller
         return view('books.edit', ['editBook' => $book]);
     }
 
-    public function destroy() {
+    public function destroy($id) {
+        $book = Book::find($id);
         $book->delete();
         return redirect('/books');
     }
+
+    public function update(Request $request, $id) {
+        $book = Book::find($id);
+        $book->update([
+            'title' => $request['title'],
+            'author' => $request['author'],
+            'released_at' => $request['released_at'],
+        ]);
+    
+        return redirect('/books/' . $book->id);
+    }    
 }
