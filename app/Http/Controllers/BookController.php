@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Book;
+use App\Http\Controllers\Controller;
+// use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class BookController extends Controller
 {
     public function index() {
-        $books = Book::all();
-        return view('books.index', ['books' => $books]);
+        try {
+            $books = Book::all();
+            return view('books.index', ['books' => $books]);
+        } catch (Exception $e) {
+            \Log::error('Error fetching books: ' . $e->getMessage());
+            return redirect('/books')->with('error', 'Failed to fetch books.');
+        }
     }
 
     public function create() {
@@ -17,39 +24,37 @@ class BookController extends Controller
     }
 
     public function store(Request $request) {
-        $book = Book::create([
-            'title' => $request['title'],
-            'author' => $request['author'],
-            'released_at' => $request['released_at'],
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'author' => 'required|string|max:255',
+            'released_at' => 'required|date',
         ]);
 
-        return redirect('/books/' . $book->id);
+        $book = Book::create($validated);
+        return redirect()->route('books.show', $book);
     }
 
-    public function show($id) {
-        $book = Book::find($id);
+    public function show(Book $book) {
         return view('books.show', ['singleBook' => $book]);
     }
 
-    public function edit($id) {
-        $book = Book::find($id);
+    public function edit(Book $book) {
         return view('books.edit', ['editBook' => $book]);
     }
 
-    public function destroy($id) {
-        $book = Book::find($id);
-        $book->delete();
-        return redirect('/books');
+    public function update(Request $request, Book $book) {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'author' => 'required|string|max:255',
+            'released_at' => 'required|date',
+        ]);
+
+        $book->update($validated);
+        return redirect()->route('books.show', $book);
     }
 
-    public function update(Request $request, $id) {
-        $book = Book::find($id);
-        $book->update([
-            'title' => $request['title'],
-            'author' => $request['author'],
-            'released_at' => $request['released_at'],
-        ]);
-    
-        return redirect('/books/' . $book->id);
-    }    
+    public function destroy(Book $book) {
+        $book->delete();
+        return redirect()->route('books.index');
+    }
 }
