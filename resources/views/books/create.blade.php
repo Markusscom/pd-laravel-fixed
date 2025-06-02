@@ -1,24 +1,51 @@
 <x-layout>
-<h1>New book</h1>
+    <h1 class="mb-4">New book</h1>
 
-<form action="{{ route('books.store')}}" method="post">
-    @csrf
+    <form action="{{ route('books.store') }}" method="post" class="needs-validation" novalidate>
+        @csrf
 
-    <input type="text" name="title" value="{{ old('title') }}" placeholder="title goes here">
-    @error('title')
-        <div style="color: red;">{{ $message }}</div>
-    @enderror
+        <div class="mb-3">
+            <input 
+                type="text" 
+                name="title" 
+                value="{{ old('title') }}" 
+                placeholder="Title goes here" 
+                class="form-control @error('title') is-invalid @enderror"
+                required
+            >
+            @error('title')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-    <input type="text" name="author" value="{{ old('author') }}" placeholder="author goes here">
-    @error('author')
-        <div style="color: red;">{{ $message }}</div>
-    @enderror
+        <div class="mb-3">
+            <input 
+                type="text" 
+                name="author" 
+                value="{{ old('author') }}" 
+                placeholder="Author goes here" 
+                class="form-control @error('author') is-invalid @enderror"
+                required
+            >
+            @error('author')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-    <input type="date" name="released_at" value="{{ old('released_at') }}" placeholder="date goes here">
-    @error('released_at')
-        <div style="color: red;">{{ $message }}</div>
-    @enderror
+        <div class="mb-3">
+            <input 
+                type="date" 
+                name="released_at" 
+                value="{{ old('released_at') }}" 
+                placeholder="Date goes here" 
+                class="form-control @error('released_at') is-invalid @enderror"
+                required
+            >
+            @error('released_at')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-    <input type="submit" value="Create">
-</form>
+        <button type="submit" class="btn btn-primary">Create</button>
+    </form>
 </x-layout>

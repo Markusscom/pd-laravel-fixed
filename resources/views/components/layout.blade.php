@@ -4,20 +4,32 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Laravel 12!!!</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            plugins: [window.daisyui],
+        }
+    </script>
 </head>
-<body>
+<body class="min-h-screen flex flex-col">
+
     <header class="p-3 bg-light mb-4 border-bottom">
         <div class="container d-flex flex-wrap gap-2">
             <a href="{{ route('contact.index') }}" class="btn btn-primary btn-sm">All Contacts</a>
             <a href="{{ route('contact.create') }}" class="btn btn-success btn-sm">Create Contact</a>
+            <a href="{{ route('image.index') }}" class="btn btn-warning btn-sm text-white">All Images</a>
+            <a href="{{ route('image.create') }}" class="btn btn-success btn-sm">Create Image</a>
             <a href="{{ route('books.index') }}" class="btn btn-info btn-sm">All Books</a>
             <a href="{{ route('books.create') }}" class="btn btn-warning btn-sm text-white">Create Book</a>
             <a href="{{ route('about.index') }}" class="btn btn-primary btn-sm">About me</a>
         </div>
     </header>
 
-    <main class="container">
+    <main class="container flex-grow px-3">
         {{ $slot }}
     </main>
 
@@ -27,6 +39,6 @@
             <p class="mb-0 text-muted">Website Hosted by Laravel</p>
         </div>
     </footer>
+
 </body>
 </html>
-
